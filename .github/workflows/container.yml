@@ -1,0 +1,63 @@
+name: Build containers
+
+on:
+  push:
+    branches:
+      - main
+
+env:
+  READER_NAME: ${GITHUB_REPOSITORY}-reader
+  READER_PORT: 9010
+  WRITER_NAME: ${GITHUB_REPOSITORY}-writer
+  WRITER_PORT: 9011
+
+jobs:
+  push_reader:
+    runs-on: ubuntu-latest
+    permissions:
+      packages: write
+      contents: read
+
+    steps:
+      - uses: actions/checkout@v3
+
+      - name: Build reader image
+        run: >-
+          docker build
+          --tag "ghcr.io/${{ env.READER_NAME }}:${GITHUB_SHA}"
+          --build-arg MODULE=reader
+          --build-arg PORT=${{ env.READER_PORT }}
+          .
+
+      - name: Log in to registry
+        # This is where you will update the PAT to GITHUB_TOKEN
+        run: echo "${{ secrets.GITHUB_TOKEN }}" | docker login ghcr.io -u $ --password-stdin
+
+      - name: Push image
+        run: |
+          docker push ghcr.io/${{ env.READER_NAME }}:$GITHUB_SHA
+
+  push_writer:
+    runs-on: ubuntu-latest
+    permissions:
+      packages: write
+      contents: read
+    
+    steps:
+      - uses: actions/checkout@v3
+
+      - name: Build reader image
+        run: >-
+          docker build
+          --tag "ghcr.io/${{ env.WRITER_NAME }}:${GITHUB_SHA}"
+          --build-arg MODULE=reader
+          --build-arg PORT=${{ env.WRITER_PORT }} 
+          .
+
+      - name: Log in to registry
+        # This is where you will update the PAT to GITHUB_TOKEN
+        run: echo "${{ secrets.GITHUB_TOKEN }}" | docker login ghcr.io -u $ --password-stdin
+
+      - name: Push image
+        run: |
+          docker push ghcr.io/${{ env.WRITER_NAME }}:$GITHUB_SHA

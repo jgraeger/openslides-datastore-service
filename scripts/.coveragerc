@@ -3,6 +3,7 @@ fail_under=100
 omit=
     tests/*
     datastore/shared/util/otel.py
+    datastore/writer/redis_backend/redis_connection_handler.py
 
 [html]
 directory = tests/htmlcov

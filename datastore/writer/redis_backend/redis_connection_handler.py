@@ -13,6 +13,7 @@ from datastore.shared.services import EnvironmentService, ShutdownService
 
 
 class ENVIRONMENT_VARIABLES:
+    DSN = "MESSAGE_BUS_DSN"
     HOST = "MESSAGE_BUS_HOST"
     PORT = "MESSAGE_BUS_PORT"
 
@@ -35,6 +36,9 @@ class RedisConnectionHandlerService:
         return self.connection
 
     def get_connection(self):
+        if self.environment.try_get(ENVIRONMENT_VARIABLES.DSN):
+            return redis.from_url(self.environment.get(ENVIRONMENT_VARIABLES.DSN))
+
         host = self.environment.get(ENVIRONMENT_VARIABLES.HOST)
         port = int(self.environment.try_get(ENVIRONMENT_VARIABLES.PORT) or 6379)
         return redis.Redis(host=host, port=port)
