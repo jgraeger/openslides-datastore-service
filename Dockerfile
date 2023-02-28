@@ -30,7 +30,7 @@ ENV WORKER_TIMEOUT=30
 LABEL org.opencontainers.image.title="OpenSlides Datastore Service"
 LABEL org.opencontainers.image.description="Service for OpenSlides which wraps the database, which includes reader and writer functionality."
 LABEL org.opencontainers.image.licenses="MIT"
-LABEL org.opencontainers.image.source="https://github.com/OpenSlides/openslides-datastore-service"
+LABEL org.opencontainers.image.source="https://github.com/jgraeger/openslides-datastore-service"
 
 ENTRYPOINT ["./entrypoint.sh"]
 CMD exec gunicorn -w $NUM_WORKERS -b 0.0.0.0:$PORT datastore.$MODULE.app:application -t $WORKER_TIMEOUT

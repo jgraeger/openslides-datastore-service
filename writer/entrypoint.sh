@@ -1,6 +1,7 @@
 #!/bin/bash
 
-source wait-for-message-bus.sh
+# Don't wait for message bus because of the custom redis setup. Fix later
+# source wait-for-message-bus.sh
 source wait-for-database.sh
 
 # Create schema in postgresql
