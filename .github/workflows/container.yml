@@ -46,11 +46,11 @@ jobs:
     steps:
       - uses: actions/checkout@v3
 
-      - name: Build reader image
+      - name: Build writer image
         run: >-
           docker build
           --tag "ghcr.io/${{ env.WRITER_NAME }}:${GITHUB_SHA}"
-          --build-arg MODULE=reader
+          --build-arg MODULE=writer
           --build-arg PORT=${{ env.WRITER_PORT }} 
           .
 
